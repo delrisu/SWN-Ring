@@ -12,7 +12,7 @@ import java.util.List;
 public class Publisher implements Runnable {
 
     private final List<String> token;
-    private ZMQ.Socket socket;
+    private final ZMQ.Socket socket;
 
     public Publisher(String port, ZContext context, List<String> token) {
         this.socket = context.createSocket(SocketType.PUB);
@@ -30,8 +30,8 @@ public class Publisher implements Runnable {
                     socket.send(token.get(0));
                     Thread.sleep(1000);
                 }
+                token.notify();
             }
-            token.notify();
         }
         this.socket.close();
     }

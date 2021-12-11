@@ -11,9 +11,9 @@ import java.util.List;
 @Slf4j
 public class Subscriber implements Runnable {
     private final List<String> token;
-    private ZMQ.Socket socket;
+    private final ZMQ.Socket socket;
 
-    public Subscriber(List<String> token, ZContext context, String host) {
+    public Subscriber(String host, ZContext context, List<String> token) {
         this.token = token;
         this.socket = context.createSocket(SocketType.SUB);
 
