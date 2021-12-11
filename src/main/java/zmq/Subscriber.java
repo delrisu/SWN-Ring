@@ -27,7 +27,13 @@ public class Subscriber implements Runnable {
         while (!Thread.currentThread().isInterrupted()) {
             String message = socket.recvStr();
             synchronized (token) {
-                token.set(0, message);
+                if (token.size() != 0) {
+                    if (!token.get(0).equals(message)) {
+                        token.set(0, message);
+                    }
+                } else {
+                    token.add(message);
+                }
                 token.notify();
             }
             Thread.sleep(5);
