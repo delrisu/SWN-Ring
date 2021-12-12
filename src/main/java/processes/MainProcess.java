@@ -29,7 +29,7 @@ public class MainProcess implements Runnable {
                 if (Integer.parseInt(received.get(0)) >= current) {
                     current = Integer.parseInt(received.get(0)) + 1;
 
-                    log.info("Received token with higher number: " + (current - 1));
+                    log.info(Thread.currentThread().getId() + " Received token with higher number: " + (current - 1));
 
                     Thread.sleep(2000);
                     if (toSend.size() == 1) {
