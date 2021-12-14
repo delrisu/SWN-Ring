@@ -25,21 +25,28 @@ public class MainProcess implements Runnable {
     @Override
     public void run() {
         while (!Thread.currentThread().isInterrupted()) {
-            if (received.size() == 1) {
-                if (Integer.parseInt(received.get(0)) >= current) {
-                    current = Integer.parseInt(received.get(0)) + 1;
+            synchronized (received) {
+                if (received.size() == 1) {
+                    if (Integer.parseInt(received.get(0)) >= current) {
+                        current = Integer.parseInt(received.get(0)) + 1;
 
-                    log.info(Thread.currentThread().getId() + " Received token with higher number: " + (current - 1));
+                        log.info(Thread.currentThread().getId() + " Received token with higher number: " + (current - 1));
 
-                    Thread.sleep(2000);
-                    if (toSend.size() == 1) {
-                        toSend.set(0, String.valueOf(current));
-                    } else {
-                        toSend.add(String.valueOf(current));
+                        synchronized (toSend) {
+                            Thread.sleep(2000);
+                            if (toSend.size() == 1) {
+                                toSend.set(0, String.valueOf(current));
+                            } else {
+                                toSend.add(String.valueOf(current));
+                            }
+
+                            toSend.notify();
+                        }
                     }
                 }
-                Thread.sleep(5);
+                received.notify();
             }
+            Thread.sleep(5);
         }
     }
 }
