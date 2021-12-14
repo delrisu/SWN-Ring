@@ -28,10 +28,10 @@ public class Publisher implements Runnable {
             synchronized (token) {
                 if (token.size() == 1) {
                     socket.send(token.get(0));
-                    Thread.sleep(1000);
                 }
-                token.notify();
+                token.notifyAll();
             }
+            Thread.sleep(200);
         }
         this.socket.close();
     }
